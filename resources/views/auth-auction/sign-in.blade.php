@@ -37,7 +37,7 @@
                         <div class="col-lg-6 d-flex justify-content-center align-items-center border-0 rounded-lg auth-h100">
                             <div class="w-100 p-3 p-md-5 card border-0 shadow-sm" style="max-width: 32rem;">
                                 <!-- Form -->
-                                <form class="row g-1 p-3 p-md-4" method="POST" action="{{ route('login') }}">
+                                <form class="row g-1 p-3 p-md-4" method="POST" action="{{ (route('login')) }}">
                                 @csrf
                                     <div class="col-12 text-center mb-3">
                                     <h3 class="fw-bold">VrinVrog Auction</h3>
@@ -56,13 +56,14 @@
                                                 Sign in with Google
                                             </span>
                                         </a>
-
+<!-- 
                                         <a  href="" class="btn btn-lg btn-light btn-block" id="login-button">
                                             <span class="d-flex justify-content-center align-items-center">
                                                 <img class="avatar xs me-2" src="{{asset('images/twitter-x.svg')}}" alt="Image Description">
                                                 Sign in with Twitter
                                             </span>
-                                        </a>
+                                        </a> 
+-->
 
                                         <span class="dividers text-muted mt-4">OR</span>
                                     </div>
@@ -78,17 +79,20 @@
                                             <div class="form-label">
                                                 <span class="d-flex justify-content-between align-items-center">
                                                     Password
-                                                    <a class="text-secondary" href="{{ route('auth.forgot') }}">Forgot Password?</a>
+                                                    <a class="text-secondary" href="{{(route('auth.forgot')) }}">Forgot Password?</a>
                                                 </span>
                                             </div>
-                                            <input  name="password" type="password" class="form-control form-control-lg" placeholder="***************">
+                                            <div class="input-group">
+                                            <input id="password" name="password" type="password" class="form-control form-control-lg" placeholder="8+ characters required">
+                                                <span id="showPassword" class="input-group-text" style="cursor: pointer;"><i id="showPasswordIcon" class="icofont-eye"></i> </span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-12 text-center mt-4">
                                         <button type="submit" class="btn btn-lg btn-block btn-light lift text-uppercase" name="signin">SIGN IN</button>
                                     </div>
                                     <div class="col-12 text-center mt-4">
-                                        <span>Don't have an account yet? <a href="{{route ('auth.signup')}}" class="text-secondary">Sign up here</a></span>
+                                        <span>Don't have an account yet? <a href="{{(route ('auth.signup'))}}" class="text-secondary">Sign up here</a></span>
                                     </div>
                                 </form>
                                 <!-- End Form -->
@@ -105,3 +109,17 @@
     </div>
 </body>
 </html>
+<script>
+    let showPassword = document.getElementById("showPassword");
+        let pass = document.getElementById("password");
+        let showPasswordIcon = document.getElementById("showPasswordIcon");
+        showPassword.onclick = function() {
+            showPasswordIcon.classList.toggle("icofont-eye");
+            showPasswordIcon.classList.toggle("icofont-eye-blocked");
+            if (pass.type=='password'){
+                pass.type='text';
+            }else{
+                pass.type='password';
+            }
+        }
+</script>

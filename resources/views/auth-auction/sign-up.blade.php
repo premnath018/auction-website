@@ -43,6 +43,7 @@
                                         <span>Sign in to access our dashboard.</span>
                                     </div>
                                     @csrf
+                                    <div id="successContainer" class="alert alert-success" style="display: none;"></div>
                                     <div id="errorContainer" class="alert alert-danger" style="display: none;"></div>
                                     <div class="col-12">
                                         <div class="mb-2">
@@ -59,7 +60,10 @@
                                     <div class="col-12">
                                         <div class="mb-2">
                                             <label class="form-label">Password</label>
-                                            <input name="password" type="password" class="form-control form-control-lg" placeholder="8+ characters required">
+                                            <div class="input-group">
+                                                <input id="password" name="password" type="password" class="form-control form-control-lg" placeholder="8+ characters required">
+                                                <span id="showPassword" class="input-group-text" style="cursor: pointer;"><i id="showPasswordIcon" class="icofont-eye"></i> </span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -114,6 +118,12 @@
             success: function(response) {
                 console.log(response.message);
                 // Handle success, show a success message, redirect, etc.
+                $('#successContainer').css('display', 'block');
+                showSuccessMessage("User Created Successfully. Login to continue");
+                // Redirect to the login page after a brief delay
+                setTimeout(function() {
+                    window.location.href = "{{ route('auth.login') }}";
+                }, 750); // Delay in milliseconds before redirecting (750 milliseconds in this case)
             },
             error: function(error) {
                 if (error.responseJSON) {
@@ -137,6 +147,27 @@
             errorContainer.append(errorElement);
         }
     }
+
+
+    function showSuccessMessage(message) {
+        let successContainer = $('#successContainer');
+        successContainer.empty();
+        successContainer.append(message);
+    }
+
 });
+
+let showPassword = document.getElementById("showPassword");
+let pass = document.getElementById("password");
+let showPasswordIcon = document.getElementById("showPasswordIcon");
+showPassword.onclick = function() {
+    showPasswordIcon.classList.toggle("icofont-eye");
+    showPasswordIcon.classList.toggle("icofont-eye-blocked");
+    if (pass.type=='password'){
+        pass.type='text';
+    }else{
+        pass.type='password';
+    }
+}
 
 </script>

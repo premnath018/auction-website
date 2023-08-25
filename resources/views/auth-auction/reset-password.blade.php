@@ -63,7 +63,10 @@
                                                     Password
                                                 </span>
                                             </div>
-                                            <input  name="password" type="password" class="form-control form-control-lg" placeholder="***************">
+                                            <div class="input-group">
+                                                <input id="password" name="password" type="password" class="form-control form-control-lg" placeholder="8+ characters required">
+                                                <span id="showPassword" class="input-group-text" style="cursor: pointer;"><i id="showPasswordIcon" class="icofont-eye"></i> </span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -73,7 +76,7 @@
                                                     Confirm Password
                                                 </span>
                                             </div>
-                                            <input  name="confirm_password" type="password" class="form-control form-control-lg" placeholder="***************">
+                                            <input  name="confirm_password" type="text" class="form-control form-control-lg" placeholder="***************">
                                         </div>
                                     </div>
                                     <div class="col-12 text-center mt-4">
@@ -94,3 +97,17 @@
     </div>
 </body>
 </html>
+<script>
+    let showPassword = document.getElementById("showPassword");
+        let pass = document.getElementById("password");
+        let showPasswordIcon = document.getElementById("showPasswordIcon");
+        showPassword.onclick = function() {
+            showPasswordIcon.classList.toggle("icofont-eye");
+            showPasswordIcon.classList.toggle("icofont-eye-blocked");
+            if (pass.type=='password'){
+                pass.type='text';
+            }else{
+                pass.type='password';
+            }
+        }
+</script>
