@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,7 +57,16 @@ Route::post('/forgot-password', [LoginController::class,'forgotPassword'])->name
 Route::get('/reset/{token}', [LoginController::class,'resetPassword']);
 Route::post('/reset/{token}', [LoginController::class,'resetPasswordPost']);
 
-Route::get('/reset-password', function () {return view('/auth-auction/reset-password');});
+// Route::get('/reset-password', function () {return view('/auth-auction/reset-password');});    -> No Use
+
+// Email Verification
+
+Route::post('/email-verification',[UserController::class,'verifyEmail'])->name('verify.email');
+Route::get('/email-verification',function () { return view('/auth-auction/verify-email');})->name('verify.emai');
+Route::get('/verifyEmail/{token}', [UserController::class,'verifyEmailPost']);
+
+
+Route::get('/test',function () { return view('user-profile');});
 
 // Logout Page ↓
 
@@ -66,7 +75,43 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 // Primary Page (Dashboard Page)
 
 Route::middleware('auth')->group(function () {
+
+
     Route::get('/', function () { return view('index');})->name('dashboard');
+
+    // User Profile Page
+
+    Route::get('/profile',[ UserController::class,'viewProfile' ])->name('user.profile');
+
+    // User Updation
+
+    Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('user.update');
+
+    // Product add page
+
+    Route::get('/create-auction', function () { return view('product-add');})->name('product.add');
+
+    // Product edit page
+
+    Route::get('/edit-auction/{id}',   [ProductController::class, 'edit'])->name('product.edit');
+
+    // Product add page - POST request
+
+    Route::post('/store-auction', [ProductController::class, 'store'])->name('product.store');
+
+    // Product edit page - POST request
+
+    Route::post('/edit-auction/{id}', [ProductController::class, 'editPost'])->name('product.store');
+
+    // Prodcut Delete Post
+
+    Route::post('/product/delete',  [ProductController::class, 'delete'])->name('product.delete');
+
+    // User Product List
+    
+    Route::get('/my-listings',  [ProductController::class, 'index'])->name('user.auction.list');
+
+
     // Add other dashboard-related routes here
 });
 
@@ -78,7 +123,7 @@ Route::middleware('auth')->group(function () {
 
 // Index Page
 
-Route::get('/dashboard',function(){ return view('index');})->name('dashboard');
+Route::get('/home',function(){ return view('index');})->name('dashboard');
 
 
 
