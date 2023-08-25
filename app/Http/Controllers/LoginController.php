@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\User;
+use App\Models\UserDetails;
 use App\Mail\ForgotPasswordMail;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Session\Session;
@@ -51,12 +52,14 @@ class LoginController extends Controller
                 $newUser->email = $socialUser->email;
                 $newUser->google_id = $socialUser->id;
                 $newUser->save();
-    
+                $newUserDetails = new UserDetails();
+                $newUserDetails->user_id =  $newUser->id;
+                $newUserDetails->save();
                 Auth::login($newUser);
             }
-
+            $existingUser = User::where('email', $socialUser->email)->first();
             // Storing Session Variables For Further Usages
-
+            session(['user_id' => $existingUser->id]);
             session(['name' => $socialUser->name]);
             session(['email' => $socialUser->email]);
             session(['role' => $socialUser->details_updated]);
@@ -92,7 +95,12 @@ class LoginController extends Controller
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8|confirmed',
+            'password' =>  [
+                'required',
+                'confirmed',
+                'min:8',
+            //    'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'
+            ],
            // 'accept_terms' => 'accepted',
         ]);
     
@@ -111,11 +119,14 @@ class LoginController extends Controller
             'password' => bcrypt($userData['password']), // Make sure to hash the password
         ]);
 
+        $newUserDetails = new UserDetails();
+        $newUserDetails->user_id =  $user->id;
+        $newUserDetails->save();
+        
         // Optionally, you can perform additional actions here, such as sending notifications,
         // assigning roles, etc.
-        response()->json(['message' => 'User created successfully'], 201);
 
-        return redirect()->route('auth.login')->with('message','Account Created. Login to Continue'); 
+        return  response()->json(['message' => 'User created successfully'], 201); 
     }
     
     // Function to handle the login pages for user authentication
@@ -130,7 +141,7 @@ class LoginController extends Controller
             Auth::login($user);
 
             // Store the users sessions data
-
+            session(['user_id' => $user->id]);
             session(['name' => $user->name]);
             session(['email' => $user->email]);
             session(['role' => $user->details_updated]);
@@ -174,6 +185,7 @@ class LoginController extends Controller
      public function resetPasswordPost($token,Request $request)  {
         if ($request->password == $request->confirm_password){
             $user = User::GetTokenSingle($token); 
+            $user->remember_token = '';
             $user->password = Hash::make($request->password);
             $user->save();
             return redirect()->route('auth.login')->with('message',"Password Reset Succesfully. Login to Continue");
