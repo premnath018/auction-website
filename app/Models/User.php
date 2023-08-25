@@ -52,4 +52,10 @@ class User extends Authenticatable
     static public function GetTokenSingle($remember_token){
         return User::where('remember_token','=',$remember_token)->first();
     }
+
+    public function userDetails()
+    {
+        return $this->hasOne(UserDetails::class, 'user_id'); // 'user_id' is the foreign key in userdetails table
+    }
+
 }
