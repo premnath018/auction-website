@@ -47,7 +47,7 @@
                                         <tbody>
                                         @foreach ($products as $product)
                                         <tr>
-                                        <td><strong><a href="">{{ 'VVP'.$product->id }}</strong></td>
+                                        <td><strong><a href="{{ url('/auction', $product->id) }}" >{{ 'VVP'.$product->id }}</strong></td>
 
                                         <td>{{ $product->name }}</td>
 

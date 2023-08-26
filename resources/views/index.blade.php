@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','VrinVrog - User Profile')
+@section('title','VrinVrog - Home')
         @section('main-content')
             <!-- Body: Body -->
             <div class="body d-flex py-lg-3 py-md-2">

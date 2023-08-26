@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AuctionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,6 +111,10 @@ Route::middleware('auth')->group(function () {
     // User Product List
     
     Route::get('/my-listings',  [ProductController::class, 'index'])->name('user.auction.list');
+
+    // Auction Product Details
+
+    Route::get('/auction/{id}', [AuctionController::class, 'AuctionProductDetail'])->name('auction.id');
 
 
     // Add other dashboard-related routes here
