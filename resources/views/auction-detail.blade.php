@@ -38,15 +38,15 @@
                                                     </div>
                                                     <div class="product-image">
                                                         <div class="product-image-active tab-content" id="v-pills-tabContent">
-                                                            <a class="single-image tab-pane fade" id="v-pills-one" role="tabpanel" aria-labelledby="v-pills-one-tab">
-                                                                <img src="{{ asset('storage/products/'.$product->image1) }}" alt="">
-                                                            </a>
-                                                            <a class="single-image tab-pane fade" id="v-pills-two" role="tabpanel" aria-labelledby="v-pills-two-tab">
-                                                                <img src="{{ asset('storage/products/'.$product->image2) }}" alt="">
-                                                            </a>
-                                                            <a class="single-image tab-pane fade active show" id="v-pills-three" role="tabpanel" aria-labelledby="v-pills-three-tab">
-                                                                <img src="{{ asset('storage/products/'.$product->image3) }}" alt="">
-                                                            </a>
+                                                        <a class="single-image tab-pane fade" id="v-pills-one" role="tabpanel" aria-labelledby="v-pills-one-tab">
+                                                            <img src="{{ asset('storage/products/'.$product->image1) }}" alt="" width="450" height="450"  style="object-fit: cover;">
+                                                        </a>
+                                                        <a class="single-image tab-pane fade" id="v-pills-two" role="tabpanel" aria-labelledby="v-pills-two-tab">
+                                                            <img src="{{ asset('storage/products/'.$product->image2) }}" alt="" width="450" height="450"  style="object-fit: cover;">
+                                                        </a>
+                                                        <a class="single-image tab-pane fade active show" id="v-pills-three" role="tabpanel" aria-labelledby="v-pills-three-tab">
+                                                            <img src="{{ asset('storage/products/'.$product->image3) }}" alt="" width="450" height="450" style="object-fit: cover;" >
+                                                        </a>
                                                             
                                                         
                                                         </div>
