@@ -39,13 +39,13 @@
                                                     <div class="product-image">
                                                         <div class="product-image-active tab-content" id="v-pills-tabContent">
                                                         <a class="single-image tab-pane fade" id="v-pills-one" role="tabpanel" aria-labelledby="v-pills-one-tab">
-                                                            <img src="{{ asset('storage/products/'.$product->image1) }}" alt="" width="450" height="450"  style="object-fit: cover;">
+                                                            <img src="{{ asset('storage/products/'.$product->image1) }}" alt="" width="450" height="450"  style="object-fit: cover; border-radius: 13px;">
                                                         </a>
                                                         <a class="single-image tab-pane fade" id="v-pills-two" role="tabpanel" aria-labelledby="v-pills-two-tab">
-                                                            <img src="{{ asset('storage/products/'.$product->image2) }}" alt="" width="450" height="450"  style="object-fit: cover;">
+                                                            <img src="{{ asset('storage/products/'.$product->image2) }}" alt="" width="450" height="450"  style="object-fit: cover;  border-radius: 13px;">
                                                         </a>
                                                         <a class="single-image tab-pane fade active show" id="v-pills-three" role="tabpanel" aria-labelledby="v-pills-three-tab">
-                                                            <img src="{{ asset('storage/products/'.$product->image3) }}" alt="" width="450" height="450" style="object-fit: cover;" >
+                                                            <img src="{{ asset('storage/products/'.$product->image3) }}" alt="" width="450" height="450" style="object-fit: cover;  border-radius: 13px;" >
                                                         </a>
                                                             
                                                         
@@ -61,20 +61,20 @@
                                                     
                                                     <p style="margin-bottom: 0rem;"><span class="fw-semibold fs-5">Description</span><br> {{ $product->description }} </p>
                                                     <div class="product-price fst-italic" style="padding-top: 0px;">
-                                                    <p>
-                                                    <span class="sale-price fs-6 text-muted" style="margin:0">
-                                                        Starting Bid : ₹<span class="sales-price" id="strtbid">{{ $product->starting_bid_price }}</span>
+                                                    <p style="margin-bottom:0rem">
+                                                    <span class="sale-price fs-6 text-muted" >
+                                                        Starting Bid : ₹<span class="sales-price" id="startingBid">{{ $product->starting_bid_price }}</span>
                                                     </span> 
                                                     @if ($product->bid_increment !== null)
                                                         <span class="sale-price fs-6 text-muted" style="margin:0">
-                                                            Increment Price : ₹<span class="sales-price">{{ $product->bid_increment }}</span>
+                                                            Increment Price : ₹<span class="sales-price"u id="increment-price">{{ $product->bid_increment }}</span>
                                                         </span>
                                                     @endif
                                                     <br>
                                                 </p>
-                                                @if ($product->current_price !== null)
-                                                    <p class="sale-price fs-4" style="margin:0; margin-bottom:0.7rem">
-                                                        Current Bid : ₹<span class="sales-price" id="crntbid">{{ $product->current_bid_price }}</span>
+                                                @if ($product->current_bid_price !== null)
+                                                    <p class="sale-price fs-5" style="margin:0; ">
+                                                        Current Bid : ₹<span class="sales-price" id="current-bid">{{ $product->current_bid_price }}</span>
                                                     </p>
                                                 @endif
 
@@ -83,11 +83,16 @@
                                                     <!--Countdown-->
 
                                                     <div class="d-flex flex-wrap" style="margin-bottom: 3px;">
-                                                        <span class="fw-bolder text-danger ">Finishes in</span>
-                                                    </div>
-                                                    
-                                                    
-                                                    <div class="container text-color fs-3" style="padding-left: 0;">
+                                                    @if ($product->BidStartTime >  $product->now )
+                                                        <span id="status" class="fw-bolder text-success fs-5">Starts in</span>
+                                                    @elseif ($product->BidEndTime > $product->now )
+                                                        <span id="status" class="fw-bolder text-danger fs-5">Finishes in</span>
+                                                    @else
+                                                        <span id="status" class="fw-bolder text-secondary fs-5">Auction Finished</span>
+                                                    @endif
+                                                </div>
+                                                @if ($product->BidStartTime >  $product->now || $product->BidEndTime > $product->now )    
+                                                    <div class="container text-color fs-3" style="padding-left: 0;" id="timer">
                                                         <div class="container-segment">
                                                             <div class="segment">
                                                                 <div class="flip-card" data-days-tens>
@@ -141,7 +146,8 @@
                                                             <div class="segment-title time-color fw-bold">Seconds</div>
                                                         </div>
                                                     </div>
-
+                                                @else
+                                                @endif
                                                     <style>
 
                                                     .text-color{
@@ -235,35 +241,43 @@
                                                     font-size: 1rem;
                                                     }
                                                     </style>
-
-                                                    <div class="product-btn mb-5">
-                                                        <!-- <div class="d-flex flex-wrap">
-                                                            <span class="fs-5 text-danger">Ends in</span>
-                                                        </div>
-                                                        <div class="d-flex flex-wrap">
-                                                            <p class="fs-2 text-danger" id="countdownTimer">
-                                                                <span class="avatar rounded-circle text-primary"><i class="icofont-sand-clock"></i></span>                                                  
-                                                                <span id="days">00</span>:
-                                                                <span id="hours">00</span>:
-                                                                <span id="minutes">00</span>:
-                                                                <span id="seconds">00</span>
-
-                                                            </p> 
-                                                        </div>                                                        -->
+                                                <div id="timer-below1"  style="display: none;">
+                                                <div class="product-btn mb-5" style="padding-top: 0rem;">
                                                         <div class="d-flex flex-wrap">
                                                             <div class="mt-2 mt-sm-0  me-1">
                                                                 <div class="input-group">
                                                                     <span class="input-group-text">₹</span>
-                                                                    <input type="number" id="bidprice" class="form-control" placeholder="100" min="1">
+                                                                    <input  type="number" id="bidprice"  value="{{ $product->current_bid_price + $product->bid_increment }}" class="form-control" placeholder="100" min="1">
                                                                 </div>
                                                             </div>
-                                                            <button id="bidbtn" class="btn btn-primary mx-1 mt-2  mt-sm-0">Add Your Bid</button>
-                                                            <button class="btn btn-primary mx-1 mt-2 mt-sm-0 w-sm-100"><i class="fa fa-heart me-1"></i></button>
+                                                            <button type="button" id="bidbtn" onclick="placebid('{{ $product->id }}')" class="btn btn-primary mx-1 mt-2  mt-sm-0 w-sm-100">Add Your Bid</button>
+                                                            <button class="btn btn-primary mx-1 mt-2 mt-sm-0 "><i class="fa fa-heart me-1"></i></button>
                                                         </div>
-                                                        <small class="d-block text-muted mb-2">Number of Biddings: 1</small>
+                                                        <small class="d-block text-muted mb-2">Number of Biddings: <span id="no_of_bids">{{ $product->number_of_bids }}</span></small>
                                                     </div>
-                                                    <div class="alert alert-danger" role="alert" id="warningMsg">
-                                                       Enter Your Bid
+                                                   
+                                                </div> 
+                                                <div id="timer-below2" style="display: none;">
+                                                <div class="product-btn mb-5" style="padding-top: 0rem;">
+                                                    <small class="d-block text-muted mb-2">Number of Biddings: <span id="no_of_bids">{{ $product->number_of_bids }}</span></small>
+                                                    <medium class="fw-bold fs-5 mb-2">Highest Bid :
+                                                        @if ($product->current_bid_price)
+                                                            <span class="fw-4 fw-bold" style="color: tomato"> ₹{{ $product->current_bid_price }}</span><br>
+                                                        @endif
+                                                        <span class="fw-semibold fs-6 mb-2 text-muted">
+                                                            @if ($buyer)
+                                                                Bagged By {{ $buyer->name }}
+                                                            @endif
+                                                        </span>
+                                                    </medium>
+                                                    @if (!($buyer))
+                                                               <span class="fw-4 fw-bold" style="color: tomato">Unsold</span><br>  
+                                                        @endif
+                                                </div>
+                                            </div>
+                                            <div class="alert alert-danger" role="alert" id="warningMsg" style="display: none;">
+                                                    </div>
+                                            <div class="alert alert-success" role="success" id="successMsg" style="display: none;">
                                                     </div>
                                                 </div>
                                             </div> 
@@ -272,304 +286,100 @@
                                             <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                                                 <h6 class="mb-0 fw-bold fs-4">Biddings Summary</h6>
                                             </div>
-                                            <div class="row g-3 mb-3">
-                                                <div class="col-xl-12 col-xxl-4">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="product-cart">
-                                                                <div class="checkout-table table-responsive">
-                                                                    <table id="myCartTable" class="table display dataTable table-hover align-middle" style="width:100%">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th> </th>
-                                                                                <th>Leaderboard</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td>1</td>
-                                                                                <td class="display-7">
-                                                                                    <i class="icofont-user-suited avatar lg rounded me-2"></i><span class="fs-5 title text-primary">Oculus VR </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>2</td>
-                                                                                <td class="display-7">
-                                                                                    <i class="icofont-user-suited avatar lg rounded me-2"></i><span class="fs-5 title text-primary">Oculus VR </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>3</td>
-                                                                                <td class="display-7">
-                                                                                    <i class="icofont-user-suited avatar lg rounded me-2"></i><span class="fs-5 title text-primary">Oculus VR </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>4</td>
-                                                                                <td class="display-7">
-                                                                                    <i class="icofont-user-suited avatar lg rounded me-2"></i><span class="fs-5 title text-primary">Oculus VR </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>     
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-12 col-xxl-4">
-                                                    <div class="card">
-                                                        <!-- <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                                            <h6 class="mb-0 fw-bold ">Order Summary</h6>
-                                                        </div> -->
-                                                        <div class="card-body">
-                                                            <div class="product-cart">
-                                                                <div class="checkout-table table-responsive">
-                                                                    <table id="myCartTable" class="table display dataTable table-hover align-middle" style="width:100%">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th> </th>
-                                                                                <th>Recent Biddings</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td>1</td>
-                                                                                <td class="display-7">
-                                                                                    <i class="icofont-user-suited avatar lg rounded me-2"></i><span class="fs-5 title text-primary">Oculus VR </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>2</td>
-                                                                                <td class="display-7">
-                                                                                    <i class="icofont-user-suited avatar lg rounded me-2"></i><span class="fs-5 title text-primary">Oculus VR </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>3</td>
-                                                                                <td class="display-7">
-                                                                                    <i class="icofont-user-suited avatar lg rounded me-2"></i><span class="fs-5 title text-primary">Oculus VR </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>4</td>
-                                                                                <td class="display-7">
-                                                                                    <i class="icofont-user-suited avatar lg rounded me-2"></i><span class="fs-5 title text-primary">Oculus VR </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>     
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-12 col-xxl-4">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="product-cart">
-                                                                <div class="checkout-table table-responsive">
-                                                                    <table id="myCartTable" class="table display dataTable table-hover align-middle" style="width:100%">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th> </th>
-                                                                                <th>My Biddings</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td>1</td>
-                                                                                <td class="display-7">
-                                                                                    <i class="icofont-user-suited avatar lg rounded me-2"></i><span class="fs-5 title text-primary">Oculus VR </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>2</td>
-                                                                                <td class="display-7">
-                                                                                    <i class="icofont-user-suited avatar lg rounded me-2"></i><span class="fs-5 title text-primary">Oculus VR </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>3</td>
-                                                                                <td class="display-7">
-                                                                                    <i class="icofont-user-suited avatar lg rounded me-2"></i><span class="fs-5 title text-primary">Oculus VR </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>4</td>
-                                                                                <td class="display-7">
-                                                                                    <i class="icofont-user-suited avatar lg rounded me-2"></i><span class="fs-5 title text-primary">Oculus VR </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>     
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                            <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                <h6 class="mb-0 fw-bold fs-5">Leaderboard</h6><br>                  
+                                    <table  class="table table-hover align-middle mb-0" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Name</th>
+                                                <th>Bid Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="leaderboard-table">
+                                            <tr>
+                                                <td><strong>1</strong></td>
+                                                <td>Watch</td>
+                                                <td>March 13, 2021</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>2</strong></td>
+                                                <td>Toy</td>
+                                                <td>January 14, 2021</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>3</strong></td>
+                                                <td>Laptop</td>
+                                                <td>February 08, 2021</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>4</strong></td>
+                                                <td>Mobile</td>
+                                                <td>April  02, 2021</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>5</strong></td>
+                                                <td>Tv</td>
+                                                <td>June 19, 2021</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                <h6 class="mb-0 fw-bold fs-5">My Biddings</h6><br>                     
+                               <table  class="table table-hover align-middle mb-0" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Bid Price</th>
+                                                <th>Timings</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="my-biddings">
+                                            <tr>
+                                                <td><strong>1</strong></td>
+                                                <td>Watch</td>
+                                                <td>March 13, 2021</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>2</strong></td>
+                                                <td>Toy</td>
+                                                <td>January 14, 2021</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>3</strong></td>
+                                                <td>Laptop</td>
+                                                <td>February 08, 2021</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>4</strong></td>
+                                                <td>Mobile</td>
+                                                <td>April  02, 2021</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>5</strong></td>
+                                                <td>Tv</td>
+                                                <td>June 19, 2021</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!--Recommendations Card-->
-                        <div class="card">
-                            <div class="pt-5 pb-5" style="padding:0;">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <h3 class="mb-3">Recommendations</h3>
-                                        </div>
-                                        <div class="col-6 text-right">
-                                            <a class="btn btn-primary mb-3 mr-1" href="#carouselExampleIndicators2" role="button" data-slide="prev">
-                                                <i class="fa fa-arrow-left"></i>
-                                            </a>
-                                            <a class="btn btn-primary mb-3 " href="#carouselExampleIndicators2" role="button" data-slide="next">
-                                                <i class="fa fa-arrow-right"></i>
-                                            </a>
-                                        </div>
-                                        <div class="col-12">
-                                            <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
-                            
-                                                <div class="carousel-inner">
-                                                    <div class="carousel-item active">
-                                                        <div class="row">
-                            
-                                                            <div class="col-md-4 mb-3">
-                                                                <div class="card">
-                                                                    <img class="img-fluid" alt="100%x280" src="https://images.unsplash.com/photo-1532781914607-2031eca2f00d?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=7c625ea379640da3ef2e24f20df7ce8d">
-                                                                    <div class="card-body">
-                                                                        <h4 class="card-title">Special title treatment</h4>
-                                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                                            View Details
-                                                                        </a>
-                                                                    </div>
-                            
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 mb-3">
-                                                                <div class="card">
-                                                                    <img class="img-fluid" alt="100%x280" src="https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=42b2d9ae6feb9c4ff98b9133addfb698">
-                                                                    <div class="card-body">
-                                                                        <h4 class="card-title">Special title treatment</h4>
-                                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                                            View Details
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 mb-3">
-                                                                <div class="card">
-                                                                    <img class="img-fluid" alt="100%x280" src="https://images.unsplash.com/photo-1532712938310-34cb3982ef74?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=3d2e8a2039c06dd26db977fe6ac6186a">
-                                                                    <div class="card-body">
-                                                                        <h4 class="card-title">Special title treatment</h4>
-                                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                                            View Details
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                            
-                                                        </div>
-                                                    </div>
-                                                    <div class="carousel-item">
-                                                        <div class="row">
-                            
-                                                            <div class="col-md-4 mb-3">
-                                                                <div class="card">
-                                                                    <img class="img-fluid" alt="100%x280" src="https://images.unsplash.com/photo-1532771098148-525cefe10c23?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=3f317c1f7a16116dec454fbc267dd8e4">
-                                                                    <div class="card-body">
-                                                                        <h4 class="card-title">Special title treatment</h4>
-                                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                                            View Details
-                                                                        </a>
-                                                                    </div>
-                            
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 mb-3">
-                                                                <div class="card">
-                                                                    <img class="img-fluid" alt="100%x280" src="https://images.unsplash.com/photo-1532715088550-62f09305f765?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=ebadb044b374504ef8e81bdec4d0e840">
-                                                                    <div class="card-body">
-                                                                        <h4 class="card-title">Special title treatment</h4>
-                                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                                            View Details
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 mb-3">
-                                                                <div class="card">
-                                                                    <img class="img-fluid" alt="100%x280" src="https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=0754ab085804ae8a3b562548e6b4aa2e">
-                                                                    <div class="card-body">
-                                                                        <h4 class="card-title">Special title treatment</h4>
-                                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                                            View Details
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                            
-                                                        </div>
-                                                    </div>
-                                                    <div class="carousel-item">
-                                                        <div class="row">
-                            
-                                                            <div class="col-md-4 mb-3">
-                                                                <div class="card">
-                                                                    <img class="img-fluid" alt="100%x280" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=ee8417f0ea2a50d53a12665820b54e23">
-                                                                    <div class="card-body">
-                                                                        <h4 class="card-title">Special title treatment</h4>
-                                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                                            View Details
-                                                                        </a>
-                                                                    </div>
-                            
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 mb-3">
-                                                                <div class="card">
-                                                                    <img class="img-fluid" alt="100%x280" src="https://images.unsplash.com/photo-1532777946373-b6783242f211?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=8ac55cf3a68785643998730839663129">
-                                                                    <div class="card-body">
-                                                                        <h4 class="card-title">Special title treatment</h4>
-                                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                                            View Details
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 mb-3">
-                                                                <div class="card">
-                                                                    <img class="img-fluid" alt="100%x280" src="https://images.unsplash.com/photo-1532763303805-529d595877c5?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=5ee4fd5d19b40f93eadb21871757eda6">
-                                                                    <div class="card-body">
-                                                                        <h4 class="card-title">Special title treatment</h4>
-                                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                                            View Details
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       
                     </div> <!-- Row end  -->  
                 </div>
             </div>    
@@ -579,16 +389,43 @@
 <script>
 
         // Timer JS
-            const countToDate = new Date("{{ $product->BidEndTime }}")
-            const countFromDate = new Date("{{ $product->BidStartTime }}")
-            console.log(countFromDate);
+            const countToDate = new Date("{{ $product->BidEndTimeClock }}")
+            const countFromDate = new Date("{{ $product->BidStartTimeClock }}")
             let previousTimeBetweenDates;
             var timeBetweenDates;
+            const statusSpan = document.getElementById('status');
+            const timerBelow1 = document.getElementById('timer-below1'); // Replace with the actual ID
+            const timerBelow2 = document.getElementById('timer-below2'); // Replace with the actual ID
             setInterval(() => {
                 const currentDate = new Date()
                 if (currentDate >= countFromDate && currentDate <= countToDate) {
                     timeBetweenDates = Math.ceil((countToDate - currentDate) / 1000)
-                    flipAllCards(timeBetweenDates)
+                    flipAllCards(timeBetweenDates)  
+                    timerBelow1.style.display = 'block';
+                    timerBelow2.style.display = 'none';
+                    statusSpan.textContent = 'Finishes in';
+                    statusSpan.classList.remove('text-success');
+                    statusSpan.classList.add('text-danger');
+                }
+                if (currentDate <= countFromDate ){
+                    timeBetweenDates = Math.ceil((countFromDate - currentDate) / 1000)
+                    flipAllCards(timeBetweenDates)       
+                    timerBelow1.style.display = 'none';
+                    timerBelow2.style.display = 'none';         
+                    statusSpan.textContent = 'Starts In';
+                    statusSpan.classList.remove('text-danger');
+                    statusSpan.classList.add('text-success');
+                }
+                if (currentDate >= countToDate ){
+                    const timer = document.getElementById(`timer`); 
+                    if (timer){
+                        timer.remove();
+                    }
+                    timerBelow1.style.display = 'none';
+                    timerBelow2.style.display = 'block';
+                    statusSpan.textContent = 'Auction Finished';
+                    statusSpan.classList.remove('text-danger');
+                    statusSpan.classList.add('text-secondary');
                 }
 
                 previousTimeBetweenDates = timeBetweenDates
@@ -640,39 +477,7 @@
             }
         
 
-
-
-
-
-
-        $(document).ready(function() {
-        //Ch-editer
-        ClassicEditor
-            .create( document.querySelector( '#editor' ) )
-            .catch( error => {
-                console.error( error );
-            } );
-            //Datatable
-            $('#myCartTable')
-            .addClass( 'nowrap' )
-            .dataTable( {
-                responsive: true,
-                columnDefs: [
-                    { targets: [-1, -3], className: 'dt-body-right' }
-                ]
-            });
-            $('.deleterow').on('click',function(){
-            var tablename = $(this).closest('table').DataTable();  
-            tablename
-                    .row( $(this)
-                    .parents('tr') )
-                    .remove()
-                    .draw();
-
-            } );
-           //Multiselect
-           $('#optgroup').multiSelect({ selectableOptgroup: true });
-        });
+       
 
         $(function() {
             $('.dropify').dropify();
@@ -697,7 +502,127 @@
         });
 
   
-            
+
+            function placebid(product_id) {
+                const bidAmount = parseFloat($('#bidprice').val());
+                const currentBid = parseFloat($('#current-bid').text());
+                const bidIncrement = parseFloat($('#increment-price').text());
+                const startingBid = parseFloat($('#startingBid').text())
+                // Validate the bid amount
+                console.log(bidAmount);
+                console.log(startingBid);
+                if (  bidAmount < startingBid) {
+                    $('#warningMsg').text('Bid must be greater than or equal to Starting Bid');
+                    $('#warningMsg').css('display', 'block'); 
+                    setTimeout(function() {
+                    $('#warningMsg').css('display', 'none');
+                    }, 3000);
+                    return;
+                }
+                if (  bidAmount < currentBid + bidIncrement ){
+                    $('#warningMsg').text('Bid must be greater than or equal to Current Price + Increment Price.');
+                    $('#warningMsg').css('display', 'block'); 
+                    setTimeout(function() {
+                    $('#warningMsg').css('display', 'none');
+                    }, 3000);
+                    return;
+                }
+                // Send an AJAX request to place the bid
+                $.ajax({
+                    type: 'POST',
+                    url: "/place-bid",
+                    data: {
+                        '_token': $('input[name="_token"]').val(),
+                        'bid_amount': bidAmount,
+                        'productId': product_id
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        if (response.success === true){
+                            $('#no_of_bids').text(response.number_of_bids);
+                            $('#current-bid').text(response.current_bid);
+                        }
+                    },
+                    error: function(error) {
+                        // Handle the error response, e.g., show an error message
+                        console.error(error);
+                    }
+                });
+            }
+
+    function updateProductLeaderboard(productId) {
+    $.ajax({
+        type: 'GET',
+                url: `/get-product-leaderboard/`,
+                data: {
+                        '_token': $('input[name="_token"]').val(),
+                        'productId': productId
+                    },
+                success: function(response) {
+                    if (response.success) {
+                        console.log(response);
+                        const leaderboardTable = $('#leaderboard-table');
+                        leaderboardTable.empty();
+
+                        response.topBids.forEach((entry, index) => {
+                            const row = `
+                                <tr>
+                                    <td><strong>${index + 1}</strong></td>
+                                    <td>${entry.name}</td>
+                                    <td>${entry.bid_amount}</td>
+                                </tr>
+                            `;
+                            leaderboardTable.append(row);
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+
+    function updateUserBiddings(productId) {
+    $.ajax({
+        type: 'GET',
+                url: `/get-user-biddings/`,
+                data: {
+                        '_token': $('input[name="_token"]').val(),
+                        'productId': productId
+                    },
+                success: function(response) {
+                    if (response.success) {
+                        console.log(response);
+                        const UserBiddingTable = $('#my-biddings');
+                        UserBiddingTable.empty();
+
+                        response.userBiddings.forEach((entry, index) => {
+                            const row = `
+                                <tr>
+                                    <td><strong>${index + 1}</strong></td>
+                                    <td>${entry.bid_amount}</td>
+                                    <td>${entry.formatted_timestamp}</td>
+                                </tr>
+                            `;
+                            UserBiddingTable.append(row);
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+
+    
+
+        // Call the function to update leaderboard initially and every 5 seconds
+        updateUserBiddings("{{ $product->id }}");
+        setInterval(() => updateUserBiddings("{{ $product->id }}"), 5000);
+        updateProductLeaderboard("{{ $product->id }}");
+        setInterval(() => updateProductLeaderboard("{{ $product->id }}"), 5000);
+
+        
 
     </script>
 

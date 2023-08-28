@@ -32,14 +32,15 @@
                 <ul class="menu-list flex-grow-1 mt-3">
                     <li><a class="m-link" href="{{route('dashboard')}}"><i class="icofont-home fs-5"></i> <span>Home</span></a></li>
                     <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-order">
+                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-order" href="#">
                             <i class="icofont-law-order fs-5"></i>
                             <span>Auction Center</span>
                             <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span>
                         </a>
                         <!-- Menu: Sub menu ul -->
                         <ul class="sub-menu collapse" id="menu-order">
-                            <li><a class="ms-link" href="product-grid.html">Auction Hub</a></li>
+                            <li><a class="ms-link" href="{{ route('auction.hub') }}">Auction Hub</a></li>
+                            <li><a class="ms-link" href="{{ route('auction.upcoming') }}">Upcomings</a></li>
                             <li><a class="ms-link" href="YourBiddings.html">My Biddings</a></li>
                             <li><a class="ms-link" href="Cart.html">Wishlist</a></li>
                         </ul>
@@ -209,9 +210,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="setting ms-2">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#Settingmodal"><i class="icofont-gear-alt fs-5"></i></a>
                             </div>
                         </div>
         

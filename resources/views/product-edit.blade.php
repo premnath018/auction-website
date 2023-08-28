@@ -181,30 +181,27 @@
 @section('script')
 <script>
         $(document).ready(function() {
-        //Ch-editer
-        ClassicEditor
-            .create( document.querySelector( '#editor' ) )
-            .catch( error => {
-                console.error( error );
-            } );
-            //Datatable
-            $('#myCartTable')
-            .addClass( 'nowrap' )
-            .dataTable( {
-                responsive: true,
-                columnDefs: [
-                    { targets: [-1, -3], className: 'dt-body-right' }
-                ]
-            });
-            $('.deleterow').on('click',function(){
-            var tablename = $(this).closest('table').DataTable();  
-            tablename
-                    .row( $(this)
-                    .parents('tr') )
-                    .remove()
-                    .draw();
+        //Time 
 
-            } );
+        $("input[name='startingDate'], input[name='startingTime'], input[name='endingDate'], input[name='endingTime']").on("change", function() {
+            var startingDate = new Date($("input[name='startingDate']").val() + " " + $("input[name='startingTime']").val());
+            var endingDate = new Date($("input[name='endingDate']").val() + " " + $("input[name='endingTime']").val());
+            
+            var currentDate = new Date();
+            var maxEndDate = new Date();
+            maxEndDate.setDate(currentDate.getDate() + 3);
+            
+            if (startingDate <= currentDate) {
+                alert("Starting Date and Time cannot be in the past.");
+                $("input[name='startingDate']").val("");
+                $("input[name='startingTime']").val("");
+            } else if (endingDate > maxEndDate) {
+                alert("Ending date and time must be within 3 days of the starting date and time.");
+                $("input[name='endingDate']").val("");
+                $("input[name='endingTime']").val("");
+            }
+        });
+            
            //Multiselect
            $('#optgroup').multiSelect({ selectableOptgroup: true });
         });

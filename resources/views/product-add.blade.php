@@ -13,7 +13,7 @@
                 <div class="border-0 mb-4">
                     <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                     <h3 class="fw-bold mb-0">Create Auction</h3>
-                    <button type="submit" class="btn btn-primary btn-set-task w-sm-100 py-2 px-5 text-uppercase ">Create</button>
+                    <button id="btn1" type="submit" class="btn btn-primary btn-set-task w-sm-100 py-2 px-5 text-uppercase ">Create</button>
                     </div>
                 </div>
                 </div> <!-- Row end  -->  
@@ -172,6 +172,23 @@
                         </div>
                         </div>
                     </div>
+                    <button id="btn2" type="submit" class="btn btn-primary btn-set-task w-sm-100 py-2 px-5 text-uppercase ">Create</button>
+                    <style>
+                        #btn1, #btn2 {
+                            display: block; /* Display both buttons by default */
+                        }
+                        @media screen and (max-width: 1199px) {
+                            #btn1 {
+                            display: none;
+                        }
+                    }
+                    @media screen and (min-width: 1199px) {
+                            #btn2 {
+                            display: none;
+                        }
+                    }
+        
+                    </style>
                     </div>
                 </div>
             </div> 
@@ -182,31 +199,28 @@
 @section('script')
 <script>
         $(document).ready(function() {
-        //Ch-editer
-        ClassicEditor
-            .create( document.querySelector( '#editor' ) )
-            .catch( error => {
-                console.error( error );
-            } );
-            //Datatable
-            $('#myCartTable')
-            .addClass( 'nowrap' )
-            .dataTable( {
-                responsive: true,
-                columnDefs: [
-                    { targets: [-1, -3], className: 'dt-body-right' }
-                ]
-            });
-            $('.deleterow').on('click',function(){
-            var tablename = $(this).closest('table').DataTable();  
-            tablename
-                    .row( $(this)
-                    .parents('tr') )
-                    .remove()
-                    .draw();
+        
+        
+        $("input[name='startingDate'], input[name='startingTime'], input[name='endingDate'], input[name='endingTime']").on("change", function() {
+            var startingDate = new Date($("input[name='startingDate']").val() + " " + $("input[name='startingTime']").val());
+            var endingDate = new Date($("input[name='endingDate']").val() + " " + $("input[name='endingTime']").val());
+            
+            var currentDate = new Date();
+            var maxEndDate = new Date();
+            maxEndDate.setDate(currentDate.getDate() + 3);
+            
+            if (startingDate <= currentDate) {
+                alert("Starting Date and Time cannot be in the past.");
+                $("input[name='startingDate']").val("");
+                $("input[name='startingTime']").val("");
+            } else if (endingDate > maxEndDate) {
+                alert("Ending date and time must be within 3 days of the starting date and time.");
+                $("input[name='endingDate']").val("");
+                $("input[name='endingTime']").val("");
+            }
+        });
 
-            } );
-           //Multiselect
+            //Multiselect
            $('#optgroup').multiSelect({ selectableOptgroup: true });
         });
 
