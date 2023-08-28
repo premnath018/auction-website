@@ -42,7 +42,7 @@ class ProductController extends Controller
      //   dd($request->all());
         $validator = Validator::make($request->all(),[
             'startingBidPrice' => 'required',
-            'reservePrice' => 'required',
+            'reservePrice' => 'nullable',
             'bidIncrement' => 'required',
             'category' => 'required',
             'startingDate' => 'required',

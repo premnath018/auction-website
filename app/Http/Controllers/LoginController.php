@@ -62,7 +62,7 @@ class LoginController extends Controller
             session(['user_id' => $existingUser->id]);
             session(['name' => $socialUser->name]);
             session(['email' => $socialUser->email]);
-            session(['role' => $socialUser->details_updated]);
+            session(['role' => $existingUser->details_updated]);
             return redirect()->route('dashboard');
         } catch (\Throwable $th) {
             dd($th);
