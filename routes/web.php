@@ -73,16 +73,19 @@ Route::get('/test',function () { return view('user-profile');});
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Primary Page (Dashboard Page)
 
 Route::middleware('auth')->group(function () {
 
 
-    Route::get('/', function () { return view('index');})->name('dashboard');
+    // Primary Page (Dashboard Page)
+
+    Route::get('/home',[AuctionController::class,'index'])->name('dashboard');
+
+    Route::get('/', [AuctionController::class,'index'])->name('dashboard');
 
     // User Profile Page
 
-    Route::get('/profile',[ UserController::class,'viewProfile' ])->name('user.profile');
+    Route::get('/profile',[UserController::class,'viewProfile' ])->name('user.profile');
 
     // User Updation
 
@@ -102,7 +105,7 @@ Route::middleware('auth')->group(function () {
 
     // Product edit page - POST request
 
-    Route::post('/edit-auction/{id}', [ProductController::class, 'editPost'])->name('product.store');
+    Route::post('/edit-auction/{id}', [ProductController::class, 'editPost'])->name('product.edit');
 
     // Prodcut Delete Post
 
@@ -116,6 +119,25 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/auction/{id}', [AuctionController::class, 'AuctionProductDetail'])->name('auction.id');
 
+    // Get Live Auction -> Auction Hub
+
+    Route::get('/auction-hub', [AuctionController::class,'liveAuctions'])->name('auction.hub');
+
+     // Get Upcoming Auction -> My Auction 
+     
+    Route::get('/upcomings', [AuctionController::class,'upcomingAuctions'])->name('auction.upcoming');
+
+    // Place-Bid 
+
+    Route::post('/place-bid', [AuctionController::class,'placeBid']);
+
+    // Leader Board Get Reuqest
+
+    Route::get('/get-product-leaderboard', [AuctionController::class, 'getProductLeaderboard'])->name('get.product.leaderboard');
+
+    // My Biddings Get Reuqest
+
+    Route::get('/get-user-biddings', [AuctionController::class, 'getUserBiddingsForProduct']);
 
     // Add other dashboard-related routes here
 });
@@ -128,7 +150,6 @@ Route::middleware('auth')->group(function () {
 
 // Index Page
 
-Route::get('/home',function(){ return view('index');})->name('dashboard');
 
 
 
