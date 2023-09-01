@@ -54,11 +54,9 @@
                                         <td>@if ($product->status == 1)
                                                     <span class="badge bg-warning">Upcoming</span>
                                                 @elseif ($product->status == 2)
-                                                    <span class="badge bg-success">Completed</span>
+                                                    <span class="badge bg-success">Ongoing</span>
                                                 @elseif ($product->status == 3)
-                                                    <span class="badge bg-success">Completed</span>
-                                                @else
-                                                    <span class="badge bg-danger">Ongoing</span>
+                                                    <span class="badge bg-danger">Completed</span>
                                                 @endif
                                         </td>
 
@@ -72,7 +70,7 @@
 
                                         <td>{{ $product->BidEndTime }}</td>
 
-                                        <td>{{ $product->BuyerID ?? '#NA' }}</td>
+                                        <td>{{ $product->buyer_name ?? '#NA' }}</td>
 
                                         <td>{{ $product->current_bid_price ?? '#NA' }}</td>
 

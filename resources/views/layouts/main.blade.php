@@ -41,8 +41,8 @@
                         <ul class="sub-menu collapse" id="menu-order">
                             <li><a class="ms-link" href="{{ route('auction.hub') }}">Auction Hub</a></li>
                             <li><a class="ms-link" href="{{ route('auction.upcoming') }}">Upcomings</a></li>
-                            <li><a class="ms-link" href="YourBiddings.html">My Biddings</a></li>
-                            <li><a class="ms-link" href="Cart.html">Wishlist</a></li>
+                            <li><a class="ms-link" href="/my-biddings">My Biddings</a></li>
+                            <li><a class="ms-link" href="/successfull-bids">Successfull Bids</a></li>
                         </ul>
                     </li>
                     <li class="collapsed">
@@ -60,8 +60,7 @@
                         <!-- Menu: Sub menu ul -->
                         <ul class="sub-menu collapse" id="menu-Componentsone">
                             <li><a class="ms-link" href="{{route('user.profile')}}">Profile</a></li>
-                            <li><a class="ms-link" href="#">Payment Settings</a></li>
-                            <li><a class="ms-link" href="#">Transaction History</a></li>
+                            <li><a class="ms-link" href="/transaction-history">Transaction History</a></li>
                         </ul>
                     </li>
                     <li class="collapsed">
@@ -88,7 +87,26 @@
 
             <!-- Body: Header -->
             <div class="header">
-                <nav class="navbar py-4">
+                <div  class="d-flex justify-content-center pt-3">
+                    <div id="logoheader">
+                        <a href="{{ route('dashboard') }}" class="mb-0 brand-icon">
+                        <span class="logo-icon">
+                            <img  style="width: 25vh" src="{{ asset('images/logo1.png') }}" alt="Logo">
+                        </span>
+                        </a>
+                    </div>
+                </div>
+                <style>
+                        #logoheader {
+                            display: block; /* Display both buttons by default */
+                        }
+                    @media screen and (min-width: 1199px) {
+                            #logoheader {
+                            display: none;
+                        }
+                    }
+                    </style>
+                <nav class="navbar py-3" id="navbar">
                 <div class="container-xxl">
         
                 <!-- header rightbar icon -->
@@ -103,86 +121,6 @@
                             <img src="{{asset('images/flag/india.png')}}" style="width: 24px; height: 24px;" alt="">
                         </a>
                     </div>
-                    
-            
-                            <!-- <div class="dropdown notifications">
-                                <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
-                                    <i class="icofont-alarm fs-5"></i>
-                                    <span class="pulse-ring"></span>
-                                </a>
-                                <div id="NotificationsDiv" class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-md-end p-0 m-0 mt-3">
-                                    <div class="card border-0 w380">
-                                        <div class="card-header border-0 p-3">
-                                            <h5 class="mb-0 font-weight-light d-flex justify-content-between">
-                                                <span>Notifications</span>
-                                                <span class="badge text-white">06</span>
-                                            </h5>
-                                        </div>
-                                        <div class="tab-content card-body">
-                                            <div class="tab-pane fade show active">
-                                                <ul class="list-unstyled list mb-0">
-                                                    <li class="py-2 mb-1 border-bottom">
-                                                        <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="{{asset('images/xs/avatar1.svg')}}" alt="">
-                                                            <div class="flex-fill ms-2">
-                                                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Chloe Walkerr</span> <small>2MIN</small></p>
-                                                                <span class="">Added New Product 2021-07-15 <span class="badge bg-success">Add</span></span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="py-2 mb-1 border-bottom">
-                                                        <a href="javascript:void(0);" class="d-flex">
-                                                            <div class="avatar rounded-circle no-thumbnail">AH</div>
-                                                            <div class="flex-fill ms-2">
-                                                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Alan	Hill</span> <small>13MIN</small></p>
-                                                                <span class="">Invoice generator </span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="py-2 mb-1 border-bottom">
-                                                        <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="{{asset('images/xs/avatar3.svg')}}" alt="">
-                                                            <div class="flex-fill ms-2">
-                                                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Melanie	Oliver</span> <small>1HR</small></p>
-                                                                <span class="">Orader  Return RT-00004</span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="py-2 mb-1 border-bottom">
-                                                        <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="{{asset('images/xs/avatar5.svg')}}" alt="">
-                                                            <div class="flex-fill ms-2">
-                                                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Boris Hart</span> <small>13MIN</small></p>
-                                                                <span class="">Product Order to Toyseller</span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="py-2 mb-1 border-bottom">
-                                                        <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="{{asset('images/xs/avatar6.svg')}}" alt="">
-                                                            <div class="flex-fill ms-2">
-                                                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Alan	Lambert</span> <small>1HR</small></p>
-                                                                <span class="">Leave Apply</span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="py-2">
-                                                        <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="{{asset('images/xs/avatar7.svg')}}" alt="">
-                                                            <div class="flex-fill ms-2">
-                                                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Zoe Wright</span> <small class="">1DAY</small></p>
-                                                                <span class="">Product Stoke Entry Updated</span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <a class="card-footer text-center border-top-0" href="#"> View all notifications</a>
-                                    </div>
-                                </div>
-                            </div> -->
-
                             <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
                                 <div class="u-info me-2">
                                     <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold"> {{ session('name'); }}</span></p>
@@ -198,7 +136,7 @@
                                                 <img class="avatar rounded-circle" src="{{asset('images/profile_av.svg')}}" alt="profile">
                                                 <div class="flex-fill ms-3">
                                                     <p class="mb-0"><span class="font-weight-bold"> {{ session('name'); }}</span></p>
-                                                    <small class=""> {{ session('email'); }}</small>
+                                                    <small class=""> {{ 'VVAUC'.session('user_id'); }}</small>
                                                 </div>
                                             </div>
                                             
@@ -220,11 +158,13 @@
         
                         <!-- main menu Search-->
                         <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
-                            <div class="input-group flex-nowrap input-group-lg">
-                                <input type="search" class="form-control" placeholder="Search" aria-label="search" aria-describedby="addon-wrapping">
-                                <button type="button" class="input-group-text" id="addon-wrapping"><i class="fa fa-search"></i></button>
-                                
+                        <form action="/search" method="POST">
+                            <div class="input-group flex-nowrap input-group-lg">   
+                                @csrf
+                                <input name="search"  type="search" class="form-control" placeholder="Search" aria-label="search" aria-describedby="addon-wrapping">
+                                <button type="submit" class="input-group-text" id="addon-wrapping"><i class="fa fa-search"></i></button>
                             </div>
+                            </form>
                         </div>
         
                     </div>

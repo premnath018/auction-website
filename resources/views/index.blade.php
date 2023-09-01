@@ -84,7 +84,7 @@
 
                         <!--Bids on live-->
                         <section class="pt-1" style="padding:0;">
-                            <div class="container">
+                            <div class="containe">
                                 <div class="row" style="padding: 0rem 1.5rem 2rem;">
                                     <div class="col-12">
                                     <h6 class="mb-0 fw-bold fs-4">Ongoing Bids</h6><br>                     
@@ -99,7 +99,7 @@
                                                             <div class="card" style="border-radius: 20px; height: auto; overflow: hidden;">
                                                                 <img  src="{{ asset('storage/products/'.$auction->image1) }}" width="300" height="300" style="object-fit: cover;">
                                                                 <div class="card-body">
-                                                                    <h4 class="card-title fw-bold" style="margin-bottom: 0;">{{ $auction->name }}</h4>
+                                                                <h4 class="card-title fw-bold" style="margin-bottom: 0;"><a href="/auction/{{$auction->id}}"> {{ $auction->name }}</a></h4>
                                                                     <p class="text-muted fs-6" style="margin-bottom: 2px;">by  {{ $auction->seller->name }}<span class="d-block fw-semibold fs-8 fst-italic">Category : {{ $auction->category_name }}</span></p>
                                                                     <span class="d-block fw-semibold fs-6 text-muted">Starting Bid: <span class="fw-semibold" style="font-size: 18px;">₹ {{ $auction->starting_bid_price }}</span></span>
                                                                     @if ($auction->current_bid_price !== null)
@@ -181,94 +181,8 @@
                         
                                                             </div>
                                                         </div>
-                                                    
-
+                    
                                                     @endforeach
-
-                                                        <!-- <div class="col-md-4 mb-3">
-                                                            <div class="card" style="border-radius: 20px; height: auto; overflow: hidden;">
-                                                                <img class="img-fluid" alt="100%x280" src="https://images.unsplash.com/photo-1532781914607-2031eca2f00d?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=7c625ea379640da3ef2e24f20df7ce8d">
-                                                                <div class="card-body">
-                                                                    <h4 class="card-title fw-bold" style="margin-bottom: 0;">Oculus VR</h4>
-                                                                    <p class="text-muted fs-7" style="margin-bottom: 2px;">by John<span class="d-block fw-normal fs-6">Category: Electronics</span></p>
-                                                                    <span class="d-block fw-semibold fs-6 text-muted">Starting Bid: <span class="fw-semibold" style="font-size: 18px;">₹ 149</span></span>
-                                                                    <span class="d-block fw-semibold fs-6" style="margin-bottom: 8px;">Current Bid: <span class="fw-bold" style="font-size: 20px;">₹ 179</span></span>
-                                                                  
-                                                                    <div class="col-12" >
-
-                                                                        <div class="" style="width: 50%; display: inline-block;">
-                                                                            <div class="d-flex flex-wrap">
-                                                                                <span class="fw-semibold text-danger mb-1">Finishes in</span>
-                                                                            </div>
-                                                                            
-                                                                            
-                                                                            <div class="container text-color fs-6" style="padding-left: 0;">
-                                                                                <div class="container-segment">
-                                                                                    <div class="segment">
-                                                                                        <div class="flip-card" data-days-tens>
-                                                                                            <div class="top text-color">0</div>
-                                                                                            <div class="bottom text-color">0</div>
-                                                                                        </div>
-                                                                                        <div class="flip-card" data-days-ones>
-                                                                                            <div class="top text-color">0</div>
-                                                                                            <div class="bottom text-color">0</div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="segment-title fw-semibold time-color fs-7">D</div>
-                                                                                </div>
-                                                                                <div class="container-segment">
-                                                                                    <div class="segment">
-                                                                                        <div class="flip-card" data-hours-tens>
-                                                                                            <div class="top text-color">0</div>
-                                                                                            <div class="bottom text-color">0</div>
-                                                                                        </div>
-                                                                                        <div class="flip-card" data-hours-ones>
-                                                                                            <div class="top text-color">0</div>
-                                                                                            <div class="bottom text-color">0</div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="segment-title fw-semibold time-color fs-7">H</div>
-                                                                                </div>
-                                                                                <div class="container-segment">
-                                                                                    <div class="segment">
-                                                                                        <div class="flip-card" data-minutes-tens>
-                                                                                            <div class="top text-color">0</div>
-                                                                                            <div class="bottom text-color">0</div>
-                                                                                        </div>
-                                                                                        <div class="flip-card" data-minutes-ones>
-                                                                                            <div class="top text-color">0</div>
-                                                                                            <div class="bottom text-color">0</div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="segment-title fw-semibold time-color fs-7">M</div>
-                                                                                </div>
-                                                                                <div class="container-segment">
-                                                                                    <div class="segment">
-                                                                                        <div class="flip-card" data-seconds-tens>
-                                                                                            <div class="top text-color">0</div>
-                                                                                            <div class="bottom text-color">0</div>
-                                                                                        </div>
-                                                                                        <div class="flip-card" data-seconds-ones>
-                                                                                            <div class="top text-color">0</div>
-                                                                                            <div class="bottom text-color">0</div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="segment-title fw-semibold time-color fs-7">S</div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div>
-                                                                        <a class="btn btn-primary " style="width: 40%;display: inline-block; margin-top: 10px; margin-left: 15px; border-radius: 18px;" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                                            Bid Now
-                                                                        </a>
-                                                                        </div>
-                                                                        
-                                                                    </div>
-                                                                </div>
-                        
-                                                            </div>
-                                                        </div> -->
-                                                      
                                                     </div>
                                                 </div>
                                             </div>
@@ -279,7 +193,7 @@
 
                         <!--Upcoming Bids-->
                         <section class="pt-1" style="padding:0;">
-                            <div class="container">
+                            <div class="containe">
                                 <div class="row" style="padding: 0rem 1.5rem 2rem;">
                                     <div class="col-12">
                                     <h6 class="mb-0 fw-bold fs-4">Upcoming Bids</h6><br>                     
@@ -293,7 +207,7 @@
                                                             <div class="card" style="border-radius: 20px; height: auto; overflow: hidden;">
                                                                 <img  src="{{ asset('storage/products/'.$auction->image1) }}" width="300" height="300" style="object-fit: cover;">
                                                                 <div class="card-body">
-                                                                    <h4 class="card-title fw-bold" style="margin-bottom: 0;">{{ $auction->name }}</h4>
+                                                                <h4 class="card-title fw-bold" style="margin-bottom: 0;"><a href="/auction/{{$auction->id}}"> {{ $auction->name }}</a></h4>
                                                                     <p class="text-muted fs-6" style="margin-bottom: 2px;">by  {{ $auction->seller->name }}<span class="d-block fw-semibold fs-8 fst-italic">Category : {{ $auction->category_name }}</span></p>
                                                                     <span class="d-block fw-semibold fs-6 text-muted">Starting Bid: <span class="fw-semibold" style="font-size: 18px;">₹ {{ $auction->starting_bid_price }}</span></span>
                                                                     @if ($auction->current_bid_price !== null)

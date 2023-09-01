@@ -299,31 +299,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="leaderboard-table">
-                                            <tr>
-                                                <td><strong>1</strong></td>
-                                                <td>Watch</td>
-                                                <td>March 13, 2021</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>2</strong></td>
-                                                <td>Toy</td>
-                                                <td>January 14, 2021</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>3</strong></td>
-                                                <td>Laptop</td>
-                                                <td>February 08, 2021</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>4</strong></td>
-                                                <td>Mobile</td>
-                                                <td>April  02, 2021</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>5</strong></td>
-                                                <td>Tv</td>
-                                                <td>June 19, 2021</td>
-                                            </tr>
+                                            
                                         </tbody>
                                     </table>
                                 </div>
@@ -342,31 +318,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="my-biddings">
-                                            <tr>
-                                                <td><strong>1</strong></td>
-                                                <td>Watch</td>
-                                                <td>March 13, 2021</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>2</strong></td>
-                                                <td>Toy</td>
-                                                <td>January 14, 2021</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>3</strong></td>
-                                                <td>Laptop</td>
-                                                <td>February 08, 2021</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>4</strong></td>
-                                                <td>Mobile</td>
-                                                <td>April  02, 2021</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>5</strong></td>
-                                                <td>Tv</td>
-                                                <td>June 19, 2021</td>
-                                            </tr>
+                                            
                                         </tbody>
                                     </table>
                                 </div>
@@ -509,8 +461,8 @@
                 const bidIncrement = parseFloat($('#increment-price').text());
                 const startingBid = parseFloat($('#startingBid').text())
                 // Validate the bid amount
-                console.log(bidAmount);
-                console.log(startingBid);
+              //  console.log(bidAmount);
+               // console.log(startingBid);
                 if (  bidAmount < startingBid) {
                     $('#warningMsg').text('Bid must be greater than or equal to Starting Bid');
                     $('#warningMsg').css('display', 'block'); 
@@ -537,10 +489,18 @@
                         'productId': product_id
                     },
                     success: function(response) {
-                        console.log(response);
+                      //  console.log(response);
                         if (response.success === true){
+                            $('#successMsg').text('You Bid is placed successfully.');
+                            $('#successMsg').css('display', 'block'); 
+                            setTimeout(function() {
+                            $('#successMsg').css('display', 'none');
+                            }, 3000);
                             $('#no_of_bids').text(response.number_of_bids);
-                            $('#current-bid').text(response.current_bid);
+                            $('#current-bid').text(response.current_bid)
+                            $('#bidprice').val(parseFloat(response.current_bid) + parseFloat(bidIncrement));
+                            return;
+                          
                         }
                     },
                     error: function(error) {
@@ -551,6 +511,7 @@
             }
 
     function updateProductLeaderboard(productId) {
+        const bidIncrement = parseFloat($('#increment-price').text());
     $.ajax({
         type: 'GET',
                 url: `/get-product-leaderboard/`,
@@ -560,7 +521,7 @@
                     },
                 success: function(response) {
                     if (response.success) {
-                        console.log(response);
+                    //    console.log(response);
                         const leaderboardTable = $('#leaderboard-table');
                         leaderboardTable.empty();
 
@@ -574,6 +535,11 @@
                             `;
                             leaderboardTable.append(row);
                         });
+                        $('#no_of_bids').text(response.number_of_bids);
+                        $('#current-bid').text(response.current_bid);  
+                        console.log(bidIncrement);
+                        console.log(response.current_bid);
+                        $('#bidprice').val(parseFloat(response.current_bid) + parseFloat(bidIncrement));
                     }
                 },
                 error: function(error) {
@@ -592,11 +558,12 @@
                     },
                 success: function(response) {
                     if (response.success) {
-                        console.log(response);
+                    //    console.log(response);
                         const UserBiddingTable = $('#my-biddings');
                         UserBiddingTable.empty();
 
                         response.userBiddings.forEach((entry, index) => {
+                        if (index < 5) {
                             const row = `
                                 <tr>
                                     <td><strong>${index + 1}</strong></td>
@@ -605,7 +572,10 @@
                                 </tr>
                             `;
                             UserBiddingTable.append(row);
-                        });
+                        } else {
+                            return false; // Break the loop after reaching index 4
+                        }
+                    });
                     }
                 },
                 error: function(error) {
@@ -618,9 +588,9 @@
 
         // Call the function to update leaderboard initially and every 5 seconds
         updateUserBiddings("{{ $product->id }}");
-        setInterval(() => updateUserBiddings("{{ $product->id }}"), 5000);
+        setInterval(() => updateUserBiddings("{{ $product->id }}"), 10000);
         updateProductLeaderboard("{{ $product->id }}");
-        setInterval(() => updateProductLeaderboard("{{ $product->id }}"), 5000);
+        setInterval(() => updateProductLeaderboard("{{ $product->id }}"), 10000);
 
         
 

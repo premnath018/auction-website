@@ -15,7 +15,7 @@
 
                         <!--Bids on live-->
                         <section class="pt-4 pb-2" style="padding:0;">
-                            <div class="container">
+                            <div class="containe">
                                 <div class="row" style="padding: 0rem 1.5rem 2rem;">
                                     <div class="col-12">
                                     <h6 class="mb-0 fw-bold fs-4">Ongoing Bids</h6><br>                     
@@ -30,7 +30,7 @@
                                                             <div class="card" style="border-radius: 20px; height: auto; overflow: hidden;">
                                                                 <img  src="{{ asset('storage/products/'.$auction->image1) }}" width="300" height="300" style="object-fit: cover;">
                                                                 <div class="card-body">
-                                                                    <h4 class="card-title fw-bold" style="margin-bottom: 0;">{{ $auction->name }}</h4>
+                                                                    <h4 class="card-title fw-bold" style="margin-bottom: 0;"><a href="/auction/{{$auction->id}}"> {{ $auction->name }}</a></h4>
                                                                     <p class="text-muted fs-6" style="margin-bottom: 2px;">by  {{ $auction->seller->name }}<span class="d-block fw-semibold fs-8 fst-italic">Category : {{ $auction->category_name }}</span></p>
                                                                     <span class="d-block fw-semibold fs-6 text-muted">Starting Bid: <span class="fw-semibold" style="font-size: 18px;">₹ {{ $auction->starting_bid_price }}</span></span>
                                                                     @if ($auction->current_bid_price !== null)

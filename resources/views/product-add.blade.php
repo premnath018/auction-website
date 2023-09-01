@@ -130,13 +130,13 @@
                                 <input name="startingBidPrice" type="text" class="form-control" placeholder="100">
                             </div>
                             </div>
-                            <div class="col-md-12">
+                            <!-- <div class="col-md-12">
                             <label  class="form-label">Reserve Price</label>
                             <div class="input-group w-100">
                                 <span class="input-group-text">₹</span>
                                 <input name="reservePrice" type="text" class="form-control" placeholder="500">
                             </div>
-                            </div>
+                            </div> -->
                             <div class="col-md-12">
                             <label  class="form-label">Bid Increment</label>
                             <div class="input-group w-100">

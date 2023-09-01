@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','VrinVrog - Upcomings')
+@section('title','VrinVrog - Search Result')
         @section('main-content')
             <!-- Body: Body -->
             <div class="body d-flex py-lg-3 py-md-2">
@@ -11,22 +11,134 @@
             @endif
             <div class="container-xxl">
                     <div class="col-12">
-                            <div class="card mb-3">
-
+                        <div class="card mb-3">
+                        <div class="col-12 pt-3 "  style="padding-left: 1.5rem;">
+                            <h6 class="mb-0 fw-bold fs-5">Search result</span></h6><br>                     
+                        </div>
+                        @if(count($liveAuctions)>0)
                         <!--Bids on live-->
-                        <section class="pt-4 pb-2" style="padding:0;">
+                        <section class="pt-3" style="padding:0;">
+                            <div class="containe">
+                                <div class="row" style="padding: 0rem 1.5rem 2rem;">
+                                    <div class="col-12">
+                                    <h6 class="mb-0 fw-bold fs-4">Ongoing Bids</h6><br>                     
+                                    </div>
+                                    <div class="col-12">
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active">
+                                                    <div class="row">
+                                                    @foreach($liveAuctions as $auction)
+                                                    
+                                                    <div class="col-md-4 mb-3" id="OG{{ $auction->id }}">
+                                                            <div class="card" style="border-radius: 20px; height: auto; overflow: hidden;">
+                                                                <img  src="{{ asset('storage/products/'.$auction->image1) }}" width="300" height="300" style="object-fit: cover;">
+                                                                <div class="card-body">
+                                                                <h4 class="card-title fw-bold" style="margin-bottom: 0;"><a href="/auction/{{$auction->id}}"> {{ $auction->name }}</a></h4>
+                                                                    <p class="text-muted fs-6" style="margin-bottom: 2px;">by  {{ $auction->seller->name }}<span class="d-block fw-semibold fs-8 fst-italic">Category : {{ $auction->category_name }}</span></p>
+                                                                    <span class="d-block fw-semibold fs-6 text-muted">Starting Bid: <span class="fw-semibold" style="font-size: 18px;">₹ {{ $auction->starting_bid_price }}</span></span>
+                                                                    @if ($auction->current_bid_price !== null)
+                                                                        <span class="d-block fw-semibold fs-6" style="margin-bottom: 8px;">Current Bid: <span class="fw-bold" style="font-size: 20px;">₹ {{ $auction->current_bid_price }}</span></span>
+                                                                    @else
+                                                                    <span class="d-block fw-bold fs-6" style="margin-bottom: 8px;">No Bids Yet</span>
+                                                                    @endif                                                                  <!--Countdown-->
+                                                                    <div class="col-12 countdown-timer" data-product-id="{{ $auction->id }}">
+
+                                                                        <div class="" style="width: 50%; display: inline-block;">
+                                                                            <div class="d-flex flex-wrap">
+                                                                                <span class="fw-semibold text-danger mb-1">Finishes In</span>
+                                                                            </div>
+                                                                            
+                                                                            
+                                                                            <div class="container text-color fs-6" style="padding-left: 0;">
+                                                                                <div class="container-segment">
+                                                                                    <div class="segment">
+                                                                                        <div class="flip-card" data-days-tens>
+                                                                                            <div class="top text-color">0</div>
+                                                                                            <div class="bottom text-color">0</div>
+                                                                                        </div>
+                                                                                        <div class="flip-card" data-days-ones>
+                                                                                            <div class="top text-color">0</div>
+                                                                                            <div class="bottom text-color">0</div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="segment-title fw-semibold time-color fs-7">D</div>
+                                                                                </div>
+                                                                                <div class="container-segment">
+                                                                                    <div class="segment">
+                                                                                        <div class="flip-card" data-hours-tens>
+                                                                                            <div class="top text-color">0</div>
+                                                                                            <div class="bottom text-color">0</div>
+                                                                                        </div>
+                                                                                        <div class="flip-card" data-hours-ones>
+                                                                                            <div class="top text-color">0</div>
+                                                                                            <div class="bottom text-color">0</div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="segment-title fw-semibold time-color fs-7">H</div>
+                                                                                </div>
+                                                                                <div class="container-segment">
+                                                                                    <div class="segment">
+                                                                                        <div class="flip-card" data-minutes-tens>
+                                                                                            <div class="top text-color">0</div>
+                                                                                            <div class="bottom text-color">0</div>
+                                                                                        </div>
+                                                                                        <div class="flip-card" data-minutes-ones>
+                                                                                            <div class="top text-color">0</div>
+                                                                                            <div class="bottom text-color">0</div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="segment-title fw-semibold time-color fs-7">M</div>
+                                                                                </div>
+                                                                                <div class="container-segment">
+                                                                                    <div class="segment">
+                                                                                        <div class="flip-card" data-seconds-tens>
+                                                                                            <div class="top text-color">0</div>
+                                                                                            <div class="bottom text-color">0</div>
+                                                                                        </div>
+                                                                                        <div class="flip-card" data-seconds-ones>
+                                                                                            <div class="top text-color">0</div>
+                                                                                            <div class="bottom text-color">0</div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="segment-title fw-semibold time-color fs-7">S</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                        <a href="/auction/{{$auction->id}}" class="btn btn-primary " style="width: 40%;display: inline-block; margin-top: 10px; margin-left: 15px; border-radius: 18px;">
+                                                                            Bid Now
+                                                                        </a>
+                                                                        </div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                        
+                                                            </div>
+                                                        </div>
+                    
+                                                    @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        @endif
+                    @if (count($upcomingAuctions)>0)
+                        <!--Upcoming Bids-->
+                        <section class="pt-3" style="padding:0;">
                             <div class="containe">
                                 <div class="row" style="padding: 0rem 1.5rem 2rem;">
                                     <div class="col-12">
                                     <h6 class="mb-0 fw-bold fs-4">Upcoming Bids</h6><br>                     
                                     </div>
                                     <div class="col-12">
-                                            <div class="carousel-inner">
-                                                <div class="carousel-item active">
+                                          
                                                     <div class="row">
                                                     @foreach($upcomingAuctions as $auction)
-                                                    
-                                                    <div class="col-md-4 mb-3" id="card{{ $auction->id }}">
+
+                                                    <div class="col-md-4 mb-3" id="UP{{ $auction->id }}">
                                                             <div class="card" style="border-radius: 20px; height: auto; overflow: hidden;">
                                                                 <img  src="{{ asset('storage/products/'.$auction->image1) }}" width="300" height="300" style="object-fit: cover;">
                                                                 <div class="card-body">
@@ -103,8 +215,7 @@
                                                                         </div>
                                                                         <div>
                                                                         <a href="/auction/{{$auction->id}}" class="btn btn-primary " style="width: 40%;display: inline-block; margin-top: 10px; margin-left: 15px; border-radius: 18px;">
-                                                                            View
-                                                                        </a>
+                                                                            View </a>
                                                                         </div>
                                                                         
                                                                     </div>
@@ -112,33 +223,20 @@
                         
                                                             </div>
                                                         </div>
-                                                    
+                                                        @endforeach
 
-                                                    @endforeach
-
-                                                      
-                                                    </div>
-                                                </div>
-                                            </div>
+                                              
                                     </div>
                                 </div>
                             </div>
-                      </section>
+                        </section>
+                    @endif
                     </div>
-                    <div class="row g-3 mb-3" bis_skin_checked="1">
-                                <div class="col-md-12" bis_skin_checked="1">
-                                    <nav class="justify-content-end d-flex">
-                                    {!! $upcomingAuctions->links('pagination::bootstrap-4') !!}
-                                    </nav>
-                                </div>
-                            </div>   
                 </div>
             </div>
             </div>
 
         @endsection
-
-@section('script')
       
   <!--Countdown Style-->
   <style>
@@ -235,10 +333,18 @@ font-size: 1rem;
 }
 </style>
 
+@section('script')
 <script>
 // Timer JS
-        
             @foreach($upcomingAuctions as $auction)
+                initializeCountdownTimer(
+                    "{{ $auction->BidStartTimeClock }}",
+                    "{{ $auction->BidEndTimeClock }}",
+                    "{{$auction->id}}"
+                );
+            @endforeach    
+
+            @foreach($liveAuctions as $auction)
                 initializeCountdownTimer(
                     "{{ $auction->BidStartTimeClock }}",
                     "{{ $auction->BidEndTimeClock }}",
@@ -255,7 +361,9 @@ font-size: 1rem;
             setInterval(() => {
                 const currentDate = new Date()
                 if (currentDate >= countFromDate && currentDate <= countToDate) {
-                    const card = document.getElementById(`card${productId}`); // Replace 'cardId' with the actual ID of the card element
+                    timeBetweenDates = Math.ceil((countToDate - currentDate) / 1000)
+                    flipAllCards(timeBetweenDates)
+                    const card = document.getElementById(`UP${productId}`); // Replace 'cardId' with the actual ID of the card element
                     if (card) {
                         card.remove(); // This will remove the card from the DOM
                     }
@@ -263,6 +371,13 @@ font-size: 1rem;
                 if (currentDate <= countFromDate ){
                     timeBetweenDates = Math.ceil((countFromDate - currentDate) / 1000)
                     flipAllCards(timeBetweenDates)
+                }
+                
+                if (currentDate >= countToDate ){
+                    const card = document.getElementById(`OG${productId}`); // Replace 'cardId' with the actual ID of the card element
+                    if (card) {
+                        card.remove(); // This will remove the card from the DOM
+                    }
                 }
 
                 previousTimeBetweenDates = timeBetweenDates

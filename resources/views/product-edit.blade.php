@@ -129,13 +129,13 @@
                                 <input name="startingBidPrice" type="text" class="form-control" placeholder="100" value="{{ $product->starting_bid_price }}">
                             </div>
                             </div>
-                            <div class="col-md-12">
+                            <!-- <div class="col-md-12">
                             <label  class="form-label">Reserve Price</label>
                             <div class="input-group w-100">
                                 <span class="input-group-text">₹</span>
                                 <input name="reservePrice" type="text" class="form-control" placeholder="500" value="{{ $product->reserve_price }}">
                             </div>
-                            </div>
+                            </div> -->
                             <div class="col-md-12">
                             <label  class="form-label">Bid Increment</label>
                             <div class="input-group w-100">
