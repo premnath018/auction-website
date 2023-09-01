@@ -131,13 +131,30 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/place-bid', [AuctionController::class,'placeBid']);
 
-    // Leader Board Get Reuqest
+    // Leader Board Get Reuqest For Auction Show Page
 
     Route::get('/get-product-leaderboard', [AuctionController::class, 'getProductLeaderboard'])->name('get.product.leaderboard');
 
-    // My Biddings Get Reuqest
+    // My Biddings Get Reuqest For Auction Show Page
 
     Route::get('/get-user-biddings', [AuctionController::class, 'getUserBiddingsForProduct']);
+
+    
+    // Search Query Post Request
+
+    Route::post('/search', [AuctionController::class, 'search']);
+    
+    // Transaction Histroy Page
+
+    Route::get('/transaction-history', function () { return view('transaction-history'); });
+    
+    // My Biddings Page
+
+    Route::get('/my-biddings',[AuctionController::class, 'myBiddings']);
+
+     // Successfull bids
+
+     Route::get('/successfull-bids',[AuctionController::class, 'bidsWon']);
 
     // Add other dashboard-related routes here
 });

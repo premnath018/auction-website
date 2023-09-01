@@ -69,14 +69,14 @@ class AuctionController extends Controller
             ->where('BidEndTime', '>', $now)
             ->where('SellerID', '!=', auth()->id()) // Ensure the seller is not the same as the logged-in user
             ->inRandomOrder() // Randomly order the results
-            ->take(4) // Get 3 live auction products
+            ->take(3) // Get 3 live auction products
             ->get();
     
         $upcomingAuctions = Product::where('BidStartTime', '>', $now)
             ->where('SellerID', '!=', auth()->id())
             ->orderBy('BidStartTime')
             ->inRandomOrder() // Randomly order the results
-            ->take(4) // Get 3 upcoming products
+            ->take(3) // Get 3 upcoming products
             ->get();
 
         foreach ($liveAuctions as $auction) {
@@ -143,6 +143,47 @@ class AuctionController extends Controller
         ]);
         }
     
+        public function search(Request $request)
+        {
+            $query = $request->search; // Get the search query from the request
+            
+            $upcomingAuctions = Product::where('BidStartTime', '>', now()) // Assuming you have a 'BidStartTime' column
+                ->where(function ($q) use ($query) {
+                    $q->where('name', 'like', "%$query%")
+                      ->orWhere('description', 'like', "%$query%");
+                })
+                ->orderBy('BidStartTime')
+                ->limit(6)
+                ->get();
+    
+            $liveAuctions = Product::where('BidStartTime', '<=', now()) // Assuming you have a 'BidStartTime' column
+                ->where('BidEndTime', '>=', now()) // Assuming you have a 'BidEndTime' column
+                ->where(function ($q) use ($query) {
+                    $q->where('name', 'like', "%$query%")
+                      ->orWhere('description', 'like', "%$query%");
+                })
+                ->orderBy('BidEndTime')
+                ->limit(6)
+                ->get();
+                
+            foreach ($upcomingAuctions as $auction) {
+                $auction->category_name = $this->categories[$auction->category];
+                $auction->seller = User::find($auction->SellerID);
+                $auction->BidStartTimeClock =  $this->formatDateTime($auction->BidStartTime); 
+                $auction->BidEndTimeClock =  $this->formatDateTime($auction->BidEndTime); 
+                }
+                
+        foreach ($liveAuctions as $auction) {
+            $auction->category_name = $this->categories[$auction->category];
+            $auction->seller = User::find($auction->SellerID);
+            $auction->BidStartTimeClock =  $this->formatDateTime($auction->BidStartTime); 
+            $auction->BidEndTimeClock =  $this->formatDateTime($auction->BidEndTime); 
+        }
+                
+
+            return view('search-results', compact('upcomingAuctions', 'liveAuctions'));
+        }
+
         public function placeBid(Request $request)
         {
             $product = Product::findOrFail($request->productId);
@@ -167,9 +208,11 @@ class AuctionController extends Controller
                             'number_of_bids' => $product->number_of_bids,
             ]);
         }
-           
+
         public function getProductLeaderboard(Request $request)
         {
+            $product = Product::findOrFail($request->productId);
+
             $topBids = Bidding::where('product_id', $request->productId)
             ->join('users', 'biddings.user_id', '=', 'users.id')
             ->select('users.name', 'biddings.bid_amount')
@@ -180,7 +223,9 @@ class AuctionController extends Controller
 
             return response()->json([
                 'success' => true,
-                'topBids' => $topBids
+                'topBids' => $topBids,
+                'current_bid' => $product->current_bid_price,
+                'number_of_bids' => $product->number_of_bids,
             ]);
         }
 
@@ -192,7 +237,6 @@ class AuctionController extends Controller
                 ->where('product_id', $request->productId)
                 ->with('product') // Assuming you have a relationship set up in Bidding model to fetch the associated product
                 ->orderByDesc('bid_amount') // Order by highest bid amount
-                ->limit(5)
                 ->get();
 
             foreach ($userBiddings as $bidding) {
@@ -205,4 +249,97 @@ class AuctionController extends Controller
             ]);
         }
 
-}
+        public function myBiddings()
+        {
+            $userId = auth()->id();
+        
+            $myBiddings = Bidding::with(['product', 'user'])
+                ->where('user_id', $userId)
+                ->groupBy(['product_id', 'user_id'])
+                ->selectRaw('MAX(bid_amount) as highest_bid_amount, product_id, user_id')
+                ->orderByDesc('highest_bid_amount')
+                ->paginate(9);
+        
+            $myBiddings->load(['product', 'user']);
+
+            foreach ($myBiddings as $bidding) {
+                $product = $bidding->product;
+                $bidding->product_name = $product->name;
+                $bidding->product_image = $product->image1; // Assuming you want the first image
+                $bidding->starting_bid = $product->starting_bid_price;
+                $bidding->highest_bid = $this->getHighestAmount($product);
+                $bidding->auction_status = $this->getAuctionStatus($product);
+                $bidding->bid_status = $this->getBidStatus($product, $bidding);
+                $bidding->product_id = $product->id;
+                $seller = User::find($product->SellerID);
+                $bidding->seller = $seller->name;
+            }
+        //    dd($myBiddings);
+
+            return view('user-biddings', ['myBiddings' => $myBiddings]);
+        }
+        
+        private function getHighestAmount($product)
+        {
+            $bidding = Bidding::where('product_id', $product->id)
+                ->orderByDesc('bid_amount')
+                ->limit(1)
+                ->first();
+        
+            if ($bidding) {
+                return $bidding->bid_amount;
+            }
+        
+            return 'No bidder yet';
+        }
+
+        private function getAuctionStatus($product)
+        {
+            $now = now();
+            if ($now >= $product->BidStartTime && $now <= $product->BidEndTime) {
+                return 'Ongoing';
+            } elseif ($now > $product->BidEndTime) {
+                return 'Finished';
+            } else {
+                return 'Upcoming';
+            }
+        }
+    
+        private function getBidStatus($product, $bidding)
+        {
+            $now = now();
+            if ($now >= $product->BidStartTime && $now <= $product->BidEndTime) {
+                if ($bidding->highest_bid_amount >= $product->current_bid_price) {
+                    return 'Leading';
+                } else {
+                    return 'Outbid';
+                }
+            } elseif ($now > $product->BidEndTime) {
+                if ($product->BuyerID === $bidding->user_id) {
+                    return 'Successful';
+                } else {
+                    return 'Lost';
+                }
+            } else {
+                return 'Upcoming';
+            }
+        }
+
+        public function bidsWon(){
+            $successfullBids = Product::where('BuyerID', '=', auth()->id()) // Only products where SellerID matches the logged-in user
+            ->where('BidEndTime', '<', now()) // Check BidEndTime
+            ->paginate(9); // Order by finishing time
+            foreach ($successfullBids as $bidding) {
+            $seller = User::find($bidding->SellerID);
+            $bidding->seller = $seller->name;
+            }
+       //     dd($successfullBids);
+            return view('successful-biddings', ['successfulbiddings' => $successfullBids]);
+
+            
+        }
+
+
+
+
+    }

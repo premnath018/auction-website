@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -121,6 +122,11 @@ class ProductController extends Controller
           foreach($products as $product) {
 
             $product->category = $this->categories[$product->category];          
+        
+            $product->buyer_name = $product->BuyerID
+            ? User::find($product->BuyerID)->name ?? '#NA'
+            : '#NA';
+                
             $product->BidStartTime = Carbon::parse($product->BidStartTime);
             $product->BidStartTime = $product->BidStartTime->format('d-m-Y H:i:s');
           
