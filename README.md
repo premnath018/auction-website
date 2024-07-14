@@ -1,5 +1,3 @@
-Sure, here's your updated documentation for the Auction Website with more emojis for a lively and engaging look:
-
 # Auction Website
 
 🔨 **Auction Website** is a platform built with Laravel that allows users to create accounts, verify them via email, and participate in online auctions. Users can list products for auction, bid on items, and enjoy a smooth auction experience with features like OAuth login through Google and Twitter.
